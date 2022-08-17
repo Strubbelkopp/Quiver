@@ -1,0 +1,12 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "quiver:item/quiver",
+    "layer1": "quiver:item/quiver_overlay"
+  },
+  "overrides": [
+    { "predicate": { "filled": 0.001 }, "model": "quiver:item/quiver_barely_filled" },
+    { "predicate": { "filled": 0.33 }, "model": "quiver:item/quiver_half_filled" },
+    { "predicate": { "filled": 0.66 }, "model": "quiver:item/quiver_filled" }
+  ]
+}

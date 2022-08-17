@@ -1,0 +1,7 @@
+{
+  "parent": "quiver:item/quiver",
+  "textures": {
+    "layer0": "quiver:item/quiver",
+    "layer1": "quiver:item/quiver_half_filled_overlay"
+  }
+}
