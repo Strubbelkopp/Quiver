@@ -42,7 +42,7 @@ public abstract class InGameHudMixin extends DrawableHelper {
     private void renderArrowSlot(float tickDelta, MatrixStack matrices, CallbackInfo ci, PlayerEntity player) {
         if (selectedArrow != null) {
             RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
-            RenderSystem.setShader(GameRenderer::getPositionTexShader);
+            RenderSystem.setShader(GameRenderer::getPositionTexProgram);
             RenderSystem.setShaderTexture(0, WIDGETS_TEXTURE);
             Arm arm = player.getMainArm();
             if (arm == Arm.LEFT) {
