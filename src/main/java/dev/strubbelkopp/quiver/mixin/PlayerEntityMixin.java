@@ -13,7 +13,7 @@ import java.util.function.Predicate;
 
 @Mixin(PlayerEntity.class)
 public class PlayerEntityMixin {
-    @Inject(method = "getArrowType", at = @At("HEAD"), cancellable = true)
+    @Inject(method = "getProjectileType", at = @At("HEAD"), cancellable = true)
     public void getArrowType(ItemStack stack, CallbackInfoReturnable<ItemStack> cir) {
         if (!(stack.getItem() instanceof RangedWeaponItem)) {
             cir.setReturnValue(ItemStack.EMPTY);

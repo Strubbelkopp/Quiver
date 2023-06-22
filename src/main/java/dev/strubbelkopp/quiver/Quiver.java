@@ -8,7 +8,10 @@ import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroups;
+<<<<<<< HEAD
 import net.minecraft.item.Items;
+=======
+>>>>>>> 13e00f7 (Update to 1.20.1)
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import net.minecraft.registry.RegistryKeys;

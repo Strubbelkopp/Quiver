@@ -10,14 +10,11 @@ archivesBaseName = project.archives_base_name
 version = "${project.mod_version}-mc${project.minecraft_version}"
 
 repositories {
-	// Modmenu + Trinkets
+	// Modmenu
 	maven { url = "https://maven.terraformersmc.com/releases" }
 
 	// REI
 	maven { url "https://maven.shedaniel.me" }
-
-	// Cardinal Components
-	maven { url = "https://ladysnake.jfrog.io/artifactory/mods" }
 }
 
 dependencies {
@@ -34,9 +31,6 @@ dependencies {
 
 	// REI
 	modRuntimeOnly "me.shedaniel:RoughlyEnoughItems-fabric:${project.rei_version}"
-
-	// Trinkets
-	modImplementation "dev.emi:trinkets:${project.trinkets_version}"
 }
 
 processResources {

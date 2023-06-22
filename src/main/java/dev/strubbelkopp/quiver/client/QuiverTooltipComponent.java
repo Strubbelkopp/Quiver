@@ -1,16 +1,13 @@
 package dev.strubbelkopp.quiver.client;
 
-import com.mojang.blaze3d.systems.RenderSystem;
 import dev.strubbelkopp.quiver.item.QuiverItem;
 import dev.strubbelkopp.quiver.item.QuiverTooltipData;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
 import net.minecraft.client.font.TextRenderer;
-import net.minecraft.client.gui.DrawableHelper;
+import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.ingame.HandledScreen;
 import net.minecraft.client.gui.tooltip.TooltipComponent;
-import net.minecraft.client.render.item.ItemRenderer;
-import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.collection.DefaultedList;
@@ -40,7 +37,7 @@ public class QuiverTooltipComponent implements TooltipComponent {
     }
 
     @Override
-    public void drawItems(TextRenderer textRenderer, int x, int y, MatrixStack matrices, ItemRenderer itemRenderer, int z) {
+    public void drawItems(TextRenderer textRenderer, int x, int y, DrawContext context) {
         int columns = this.getColumns();
         int rows = this.getRows();
         boolean isFull = this.occupancy >= QuiverItem.MAX_STORAGE;
@@ -49,48 +46,46 @@ public class QuiverTooltipComponent implements TooltipComponent {
             for(int column = 0; column < columns; ++column) {
                 int u = x + column * 18 + 1;
                 int v = y + row * 20 + 1;
-                this.drawSlot(u, v, i++, isFull, textRenderer, matrices, itemRenderer, z);
+                this.drawSlot(u, v, i++, isFull, context, textRenderer);
             }
         }
-        this.drawOutline(x, y, columns, rows, matrices, z);
+        this.drawOutline(x, y, columns, rows, context);
     }
 
-    private void drawSlot(int x, int y, int index, boolean shouldBlock, TextRenderer textRenderer, MatrixStack matrices, ItemRenderer itemRenderer, int z) {
+    private void drawSlot(int x, int y, int index, boolean shouldBlock, DrawContext context, TextRenderer textRenderer) {
         if (index >= this.inventory.size()) {
-            this.draw(matrices, x, y, z, shouldBlock ? QuiverTooltipComponent.Sprite.BLOCKED_SLOT : QuiverTooltipComponent.Sprite.SLOT);
+            this.draw(context, x, y, shouldBlock ? QuiverTooltipComponent.Sprite.BLOCKED_SLOT : QuiverTooltipComponent.Sprite.SLOT);
         } else {
             ItemStack itemStack = this.inventory.get(index);
-            this.draw(matrices, x, y, z, QuiverTooltipComponent.Sprite.SLOT);
-            itemRenderer.renderInGuiWithOverrides(itemStack, x + 1, y + 1, index);
-            itemRenderer.renderGuiItemOverlay(textRenderer, itemStack, x + 1, y + 1);
+            this.draw(context, x, y, QuiverTooltipComponent.Sprite.SLOT);
+            context.drawItem(itemStack, x + 1, y + 1, index);
+            context.drawItemInSlot(textRenderer, itemStack, x + 1, y + 1);
             if (index == this.activeArrowIndex) {
-                HandledScreen.drawSlotHighlight(matrices, x + 1, y + 1, z);
+                HandledScreen.drawSlotHighlight(context, x + 1, y + 1, 0);
             }
         }
     }
 
-    private void drawOutline(int x, int y, int columns, int rows, MatrixStack matrices, int z) {
-        this.draw(matrices, x, y, z, QuiverTooltipComponent.Sprite.BORDER_CORNER_TOP);
-        this.draw(matrices, x + columns * 18 + 1, y, z, QuiverTooltipComponent.Sprite.BORDER_CORNER_TOP);
+    private void drawOutline(int x, int y, int columns, int rows, DrawContext context) {
+        this.draw(context, x, y, QuiverTooltipComponent.Sprite.BORDER_CORNER_TOP);
+        this.draw(context, x + columns * 18 + 1, y, QuiverTooltipComponent.Sprite.BORDER_CORNER_TOP);
 
         for(int i = 0; i < columns; ++i) {
-            this.draw(matrices, x + 1 + i * 18, y, z, QuiverTooltipComponent.Sprite.BORDER_HORIZONTAL_TOP);
-            this.draw(matrices, x + 1 + i * 18, y + rows * 20, z, QuiverTooltipComponent.Sprite.BORDER_HORIZONTAL_BOTTOM);
+            this.draw(context, x + 1 + i * 18, y, QuiverTooltipComponent.Sprite.BORDER_HORIZONTAL_TOP);
+            this.draw(context, x + 1 + i * 18, y + rows * 20, QuiverTooltipComponent.Sprite.BORDER_HORIZONTAL_BOTTOM);
         }
 
         for(int i = 0; i < rows; ++i) {
-            this.draw(matrices, x, y + i * 20 + 1, z, QuiverTooltipComponent.Sprite.BORDER_VERTICAL);
-            this.draw(matrices, x + columns * 18 + 1, y + i * 20 + 1, z, QuiverTooltipComponent.Sprite.BORDER_VERTICAL);
+            this.draw(context, x, y + i * 20 + 1, QuiverTooltipComponent.Sprite.BORDER_VERTICAL);
+            this.draw(context, x + columns * 18 + 1, y + i * 20 + 1, QuiverTooltipComponent.Sprite.BORDER_VERTICAL);
         }
 
-        this.draw(matrices, x, y + rows * 20, z, QuiverTooltipComponent.Sprite.BORDER_CORNER_BOTTOM);
-        this.draw(matrices, x + columns * 18 + 1, y + rows * 20, z, QuiverTooltipComponent.Sprite.BORDER_CORNER_BOTTOM);
+        this.draw(context, x, y + rows * 20, QuiverTooltipComponent.Sprite.BORDER_CORNER_BOTTOM);
+        this.draw(context, x + columns * 18 + 1, y + rows * 20, QuiverTooltipComponent.Sprite.BORDER_CORNER_BOTTOM);
     }
 
-    private void draw(MatrixStack matrices, int x, int y, int z, QuiverTooltipComponent.Sprite sprite) {
-        RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
-        RenderSystem.setShaderTexture(0, TEXTURE);
-        DrawableHelper.drawTexture(matrices, x, y, z, (float)sprite.u, (float)sprite.v, sprite.width, sprite.height, 128, 128);
+    private void draw(DrawContext context, int x, int y, QuiverTooltipComponent.Sprite sprite) {
+        context.drawTexture(TEXTURE, x, y, 0, (float)sprite.u, (float)sprite.v, sprite.width, sprite.height, 128, 128);
     }
 
     private int getColumns() {
@@ -103,7 +98,6 @@ public class QuiverTooltipComponent implements TooltipComponent {
 
     @Environment(EnvType.CLIENT)
     enum Sprite {
-
         SLOT(0, 0, 18, 20),
         BLOCKED_SLOT(0, 40, 18, 20),
         BORDER_VERTICAL(0, 18, 1, 20),
