@@ -1,13 +1,10 @@
 package dev.strubbelkopp.quiver.item;
 
-import dev.emi.trinkets.api.SlotReference;
-import dev.emi.trinkets.api.TrinketComponent;
-import dev.emi.trinkets.api.TrinketItem;
-import dev.emi.trinkets.api.TrinketsApi;
 import dev.strubbelkopp.quiver.Quiver;
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.client.item.TooltipData;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.ItemEntity;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -30,7 +27,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
 
-public class QuiverItem extends TrinketItem implements DyeableItem {
+public class QuiverItem extends Item implements DyeableItem, Equipment {
 
     private static final String ITEMS_KEY = "Arrows";
     private static final String ACTIVE_SLOT_KEY = "Active Slot";
@@ -43,11 +40,10 @@ public class QuiverItem extends TrinketItem implements DyeableItem {
     }
 
     public static Optional<ItemStack> getQuiverItem(LivingEntity user) {
-        if (user != null && TrinketsApi.getTrinketComponent(user).isPresent()) {
-            TrinketComponent trinketComponent = TrinketsApi.getTrinketComponent(user).get();
-            for (Pair<SlotReference, ItemStack> trinket : trinketComponent.getAllEquipped()) {
-                if (trinket.getRight().getItem() instanceof QuiverItem) {
-                    return Optional.of(trinket.getRight());
+        if (user != null) {
+            for (ItemStack armorItem : user.getArmorItems()) {
+                if (armorItem.getItem() instanceof QuiverItem) {
+                    return Optional.of(armorItem);
                 }
             }
         }
@@ -325,5 +321,10 @@ public class QuiverItem extends TrinketItem implements DyeableItem {
             return nbtCompound.getInt(COLOR_KEY);
         }
         return DEFAULT_COLOR;
+    }
+
+    @Override
+    public EquipmentSlot getSlotType() {
+        return EquipmentSlot.CHEST;
     }
 }

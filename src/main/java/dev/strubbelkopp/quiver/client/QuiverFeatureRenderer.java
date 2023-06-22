@@ -17,8 +17,9 @@ import net.minecraft.client.render.entity.model.EntityModelLoader;
 import net.minecraft.client.render.item.ItemRenderer;
 import net.minecraft.client.util.math.MatrixStack;
 import net.minecraft.entity.LivingEntity;
+import net.minecraft.item.DyeableItem;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.math.Vec3f;
+import net.minecraft.util.math.RotationAxis;
 
 @Environment(EnvType.CLIENT)
 public class QuiverFeatureRenderer<T extends LivingEntity, M extends EntityModel<T>> extends FeatureRenderer<T, M> {
@@ -35,7 +36,7 @@ public class QuiverFeatureRenderer<T extends LivingEntity, M extends EntityModel
     public void render(MatrixStack matrices, VertexConsumerProvider vertexConsumers, int light, T entity, float limbAngle, float limbDistance, float tickDelta, float animationProgress, float headYaw, float headPitch) {
         QuiverItem.getQuiverItem(entity).ifPresent(quiver -> {
 
-            int colour = ((QuiverItem) quiver.getItem()).getColor(quiver);
+            int colour = ((DyeableItem) quiver.getItem()).getColor(quiver);
             float red = (float) (colour >> 16 & 0xFF) / 255.0F;
             float green = (float) (colour >> 8 & 0xFF) / 255.0F;
             float blue = (float) (colour & 0xFF) / 255.0F;
@@ -48,7 +49,7 @@ public class QuiverFeatureRenderer<T extends LivingEntity, M extends EntityModel
             if (entity.isInSneakingPose() && !this.getContextModel().riding && !entity.isSwimming()) {
                 matrices.translate(0.0F, 0.2F, 0.0F);
                 if (this.getContextModel() instanceof BipedEntityModel<?> bipedEntityModel) {
-                    matrices.multiply(Vec3f.POSITIVE_X.getRadialQuaternion(bipedEntityModel.body.pitch));
+                    matrices.multiply(RotationAxis.POSITIVE_X.rotation(bipedEntityModel.body.pitch));
                 }
             }
 
