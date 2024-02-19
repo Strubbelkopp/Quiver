@@ -1,29 +1,29 @@
 {
   "schemaVersion": 1,
-  "id": "quiver",
+  "id": "simple_quiver",
   "version": "${version}",
 
   "name": "Quiver",
-  "description": "A quiver, you can strap on your back to easily switch between arrow types",
+  "description": "Quiver that allows you to carry more arrows and select different ones on the fly",
   "authors": ["Strubbelkopp"],
   "contact": {
     "sources": "https://github.com/Strubbelkopp/Quiver",
     "issues": "https://github.com/Strubbelkopp/Quiver/issues"
   },
   "license": "MIT",
-  "icon": "assets/quiver/icon.png",
+  "icon": "assets/simple_quiver/icon.png",
 
   "environment": "*",
   "entrypoints": {
     "main": [
-      "dev.strubbelkopp.quiver.Quiver"
+      "dev.strubbelkopp.simple_quiver.Quiver"
     ],
     "client": [
-      "dev.strubbelkopp.quiver.client.QuiverClient"
+      "dev.strubbelkopp.simple_quiver.client.QuiverClient"
     ]
   },
   "mixins": [
-    "quiver.mixins.json"
+    "simple_quiver.mixins.json"
   ],
   "depends": {
     "fabricloader": ">=0.14.21",
@@ -34,8 +34,8 @@
   "custom": {
     "mc-publish": {
       "loaders": ["fabric", "quilt"],
-      "modrinth": "",
-      "curseforge": ""
+      "modrinth": "MuorW7lm",
+      "curseforge": "976649"
     }
   }
 }
