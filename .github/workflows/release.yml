@@ -27,7 +27,7 @@ jobs:
         run: chmod +x ./gradlew
       - name: build
         run: ./gradlew build
-      - uses: Kir-Antipov/mc-publish@v3.1
+      - uses: Kir-Antipov/mc-publish@v3.3
         with:
           changelog-file: CHANGELOG.md
           version-type: ${{ github.event.inputs.versionType }}
