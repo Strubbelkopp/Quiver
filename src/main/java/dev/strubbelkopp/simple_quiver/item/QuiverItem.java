@@ -1,6 +1,7 @@
 package dev.strubbelkopp.simple_quiver.item;
 
 import dev.strubbelkopp.simple_quiver.Quiver;
+import dev.strubbelkopp.simple_quiver.integration.trinkets.Trinkets;
 import net.minecraft.client.item.TooltipContext;
 import net.minecraft.client.item.TooltipData;
 import net.minecraft.entity.Entity;
@@ -41,6 +42,10 @@ public class QuiverItem extends Item implements DyeableItem, Equipment {
 
     public static Optional<ItemStack> getQuiverItem(LivingEntity user) {
         if (user != null) {
+            Optional<ItemStack> quiverTrinket = Trinkets.getQuiverTrinket(user);
+            if (quiverTrinket.isPresent()) {
+                return quiverTrinket;
+            }
             for (ItemStack armorItem : user.getArmorItems()) {
                 if (armorItem.getItem() instanceof QuiverItem) {
                     return Optional.of(armorItem);

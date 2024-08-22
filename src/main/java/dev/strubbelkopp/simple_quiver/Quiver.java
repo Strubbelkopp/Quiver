@@ -1,11 +1,15 @@
 package dev.strubbelkopp.simple_quiver;
 
+import dev.emi.trinkets.api.Trinket;
+import dev.emi.trinkets.api.TrinketsApi;
 import dev.strubbelkopp.simple_quiver.item.QuiverItem;
+import dev.strubbelkopp.simple_quiver.integration.trinkets.QuiverTrinketItem;
 import dev.strubbelkopp.simple_quiver.networking.CycleActiveArrowC2SPacket;
 import net.fabricmc.api.ModInitializer;
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
 import net.fabricmc.fabric.api.networking.v1.ServerPlayNetworking;
+import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroups;
 import net.minecraft.item.Items;
@@ -22,8 +26,7 @@ public class Quiver implements ModInitializer {
     public static final String MOD_ID = "simple_quiver";
     public static final Logger LOGGER = LoggerFactory.getLogger(MOD_ID);
 
-    public static final Item QUIVER = Registry.register(Registries.ITEM, new Identifier(MOD_ID, "quiver"),
-            new QuiverItem(new FabricItemSettings().maxCount(1)));
+    public static Item QUIVER;
 
     public static final TagKey<Item> ARROWS = TagKey.of(RegistryKeys.ITEM, new Identifier("c", "arrows"));
 
@@ -33,5 +36,11 @@ public class Quiver implements ModInitializer {
     public void onInitialize() {
         ItemGroupEvents.modifyEntriesEvent(ItemGroups.COMBAT).register(itemGroup -> itemGroup.addAfter(Items.CROSSBOW, QUIVER));
         ServerPlayNetworking.registerGlobalReceiver(CYCLE_ACTIVE_ARROW_PACKET_ID, CycleActiveArrowC2SPacket::receive);
+        if(FabricLoader.getInstance().isModLoaded("trinkets")) {
+            QUIVER = Registry.register(Registries.ITEM, new Identifier(MOD_ID, "quiver"), new QuiverTrinketItem(new FabricItemSettings().maxCount(1)));
+            TrinketsApi.registerTrinket(QUIVER, (Trinket) QUIVER);
+        } else {
+            QUIVER = Registry.register(Registries.ITEM, new Identifier(MOD_ID, "quiver"), new QuiverItem(new FabricItemSettings().maxCount(1)));
+        }
     }
 }

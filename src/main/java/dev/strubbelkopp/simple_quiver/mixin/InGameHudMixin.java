@@ -38,9 +38,6 @@ public abstract class InGameHudMixin {
     @Inject(method = "renderHotbar", at = @At(value = "INVOKE", target = "Lnet/minecraft/item/ItemStack;isEmpty()Z", ordinal = 0), locals = LocalCapture.CAPTURE_FAILSOFT)
     private void renderArrowSlot(float tickDelta, DrawContext context, CallbackInfo ci, PlayerEntity player) {
         if (selectedArrow != null) {
-            RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
-            RenderSystem.setShader(GameRenderer::getPositionTexProgram);
-            RenderSystem.setShaderTexture(0, WIDGETS_TEXTURE);
             Arm arm = player.getMainArm();
 
             context.getMatrices().push();
