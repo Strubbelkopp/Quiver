@@ -12,9 +12,9 @@ dunno what else to write here, just look at the feature list
 - Select an arrow type, by holding down shift and scrolling the mouse wheel
 - Dyeable with near infinite colour combinations using the vanilla colouring system
 - Renders different amounts of arrows, based on fill level (item and in-world)
+- Compatible with ['Trinkets'](https://modrinth.com/mod/trinkets)
 
 ## Future Plans
-- Compatibility with ['Trinkets'](https://modrinth.com/mod/trinkets)
 - Add some config options
 
 [<img src="https://i.imgur.com/Ol1Tcf8.png" width="35%"/>](https://modrinth.com/mod/fabric-api/)
