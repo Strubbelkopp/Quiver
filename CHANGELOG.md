@@ -1,1 +1,2 @@
 - Added Trinkets integration
+- Added russian translation (from Teppy381)
