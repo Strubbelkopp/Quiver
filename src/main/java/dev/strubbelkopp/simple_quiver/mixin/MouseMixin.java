@@ -1,6 +1,7 @@
 package dev.strubbelkopp.simple_quiver.mixin;
 
 import dev.strubbelkopp.simple_quiver.Quiver;
+import dev.strubbelkopp.simple_quiver.client.IMouse;
 import dev.strubbelkopp.simple_quiver.item.QuiverItem;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
@@ -21,15 +22,17 @@ import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
 @Environment(EnvType.CLIENT)
 @Mixin(Mouse.class)
-public class MouseMixin {
+public class MouseMixin implements IMouse {
 
     @Shadow private double eventDeltaWheel;
     @Shadow @Final private MinecraftClient client;
 
+    @Unique private boolean isCyclingArrow;
+
     @Inject(method = "onMouseScroll", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/player/PlayerInventory;scrollInHotbar(D)V"), locals = LocalCapture.CAPTURE_FAILSOFT, cancellable = true)
     private void cycleSelectedArrow(long window, double horizontal, double vertical, CallbackInfo ci, double d) {
         ClientPlayerEntity player = this.client.player;
-        if (player != null && player.isSneaking()) {
+        if (player != null && isCyclingArrow) {
             if (QuiverItem.getQuiverItem(player).isPresent()) {
                 PacketByteBuf buf = PacketByteBufs.create();
                 buf.writeBoolean(getScrollDirection(d));
@@ -39,7 +42,6 @@ public class MouseMixin {
         }
     }
 
-    // No idea what this does, but it works
     @Unique
     private boolean getScrollDirection(double d) {
         if (this.eventDeltaWheel != 0.0 && Math.signum(d) != Math.signum(this.eventDeltaWheel)) {
@@ -48,5 +50,10 @@ public class MouseMixin {
         this.eventDeltaWheel += d;
         int scrollAmount = (int)this.eventDeltaWheel;
         return Math.signum(scrollAmount) > 0;
+    }
+
+    @Override
+    public void quiver$setArrowCycleState(boolean state) {
+        this.isCyclingArrow = state;
     }
 }

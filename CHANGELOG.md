@@ -1,1 +1,1 @@
-- Fixed the quiver picking up projectiles that aren't arrows such as tridents
+- Added a keybinding for cycling arrows instead of sneaking

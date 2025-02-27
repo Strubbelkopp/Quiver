@@ -1,5 +1,7 @@
 {
   "item.simple_quiver.quiver": "Quiver",
   "item.simple_quiver.quiver.selected_arrow": "Selected: ",
-  "item.simple_quiver.quiver.fullness": "%s/%s"
+  "item.simple_quiver.quiver.fullness": "%s/%s",
+  "key.simple_quiver.arrow_cycle": "Cycle Arrow",
+  "category.simple_quiver": "Simple Quiver"
 }
