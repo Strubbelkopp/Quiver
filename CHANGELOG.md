@@ -1,2 +1,1 @@
-- Added Trinkets integration
-- Added russian translation (from Teppy381)
+- Fixed the quiver picking up projectiles that aren't arrows such as tridents
