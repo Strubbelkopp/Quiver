@@ -1,5 +1,6 @@
 package dev.strubbelkopp.simple_quiver.mixin;
 
+import dev.strubbelkopp.simple_quiver.Quiver;
 import dev.strubbelkopp.simple_quiver.item.QuiverItem;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
@@ -26,7 +27,7 @@ public abstract class PersistentProjectileEntityMixin extends Entity {
 
     @Inject(method = "onPlayerCollision", at = @At(value = "INVOKE", target = "Lnet/minecraft/entity/projectile/PersistentProjectileEntity;tryPickup(Lnet/minecraft/entity/player/PlayerEntity;)Z"), cancellable = true)
     public void collectArrowToQuiver(PlayerEntity player, CallbackInfo ci) {
-        if (this.pickupType.equals(PersistentProjectileEntity.PickupPermission.ALLOWED)) {
+        if (this.pickupType.equals(PersistentProjectileEntity.PickupPermission.ALLOWED)  && this.asItemStack().isIn(Quiver.ARROWS)) {
             QuiverItem.getQuiverItem(player).ifPresent(quiver -> {
                 int addedItemCount = QuiverItem.addToQuiver(quiver, this.asItemStack());
                 if (addedItemCount > 0) {
